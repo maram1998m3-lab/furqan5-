@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بطاقات اختبار قياس الفترة الصباحية - الأسبوع الخامس</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--maroon:#6B1A2A;--maroon-dark:#4A0F1C;--maroon-light:#8B2A3C;--gold:#C9A84C;--gold-light:#E8C97A;--border:rgba(107,26,42,0.13)}
+body{font-family:'Cairo',sans-serif;background:#FDF6EC;direction:rtl;min-height:100vh}
+.wrap{max-width:1400px;margin:0 auto}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:linear-gradient(135deg,var(--maroon-dark),var(--maroon),var(--maroon-light))}
+.org{font-family:'Amiri',serif;font-size:.95rem;color:var(--gold-light);line-height:1.3}
+.sub{font-size:.7rem;color:rgba(255,255,255,.7);margin-top:2px}
+.htitle{font-family:'Amiri',serif;font-size:1.5rem;color:#fff;text-align:center;flex:1;padding:0 12px}
+.tagline{font-size:.72rem;color:var(--gold-light);text-align:center;margin-top:3px}
+.goldbar{height:3px;background:linear-gradient(90deg,transparent,var(--gold),var(--gold-light),var(--gold),transparent)}
+.toolbar{background:var(--maroon-dark);display:flex;align-items:center;gap:8px;padding:8px 18px;flex-wrap:wrap;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.tlabel{color:var(--gold-light);font-size:.78rem;font-weight:600}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:5px 14px;border-radius:7px;border:1.5px solid var(--gold);background:transparent;color:var(--gold-light);font-family:'Cairo',sans-serif;font-size:.78rem;font-weight:600;cursor:pointer}
+.btn:hover{background:rgba(201,168,76,.12)}
+.btn.active{background:var(--gold);color:var(--maroon-dark)}
+.btn-clear{border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.65);margin-right:auto}
+.btn-clear:hover{border-color:rgba(255,255,255,.5);color:#fff}
+.btn-save{border-color:#4CAF50;color:#80d880;display:none}
+.btn-save.visible{display:inline-flex}
+.saved-badge{color:var(--gold-light);font-size:.72rem;opacity:0;transition:opacity .4s}
+.saved-badge.show{opacity:1}
+main{padding:22px 16px 36px}
+.cgroup{margin-bottom:36px}
+.gtitle{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.gtitle h2{font-family:'Amiri',serif;font-size:1.25rem;color:var(--maroon)}
+.gline{flex:1;height:1.5px;background:linear-gradient(90deg,var(--maroon),transparent);opacity:.3}
+.gbadge{background:var(--maroon);color:#fff;font-size:.72rem;padding:2px 10px;border-radius:20px;font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;align-items:start}
+.card{background:#fff;border:1.5px solid var(--border);border-radius:11px;overflow:hidden;box-shadow:0 3px 14px rgba(107,26,42,.08);position:relative;user-select:none}
+.card.selected{background:#7E1F30;border-color:var(--maroon);box-shadow:0 5px 22px rgba(107,26,42,.3)}
+.cnum{background:var(--maroon);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:8px 12px;cursor:pointer;transition:background .15s}
+.cnum:hover{background:var(--maroon-light)}
+.cnum .num{font-family:'Amiri',serif;font-size:1.1rem;font-weight:700;color:var(--gold-light)}
+.cnum .nlabel{font-size:.65rem;opacity:.75}
+.cbody{padding:0 11px;flex-direction:column;display:none}
+.card.open .cbody{display:flex;padding-bottom:9px}
+.sentry{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);gap:8px}
+.sentry:last-child{border-bottom:none}
+.sname{font-family:'Amiri',serif;font-size:.93rem;color:#2A1008;flex:1;font-weight:700}
+.sver{font-size:.72rem;color:var(--maroon);font-weight:700;background:rgba(107,26,42,.07);padding:2px 7px;border-radius:20px;white-space:nowrap;flex-shrink:0;direction:ltr;unicode-bidi:embed}
+.card.selected .sname{color:#fff}
+.card.selected .sver{color:var(--gold-light);background:rgba(255,255,255,.1)}
+.card.selected .sentry{border-bottom-color:rgba(255,255,255,.1)}
+.chk{position:absolute;top:7px;left:9px;width:17px;height:17px;background:var(--gold);border-radius:50%;display:none;align-items:center;justify-content:center;font-size:.6rem;color:var(--maroon-dark);font-weight:900;pointer-events:none}
+.card.selected .chk{display:flex}
+.ebadge{position:absolute;top:6px;left:7px;background:var(--gold);color:var(--maroon-dark);font-size:.6rem;padding:2px 6px;border-radius:8px;font-weight:700;display:none;pointer-events:none}
+.card.edit-mode .ebadge{display:block}
+.card.edit-mode .cbody{display:flex}
+[contenteditable="true"]{outline:none;border-bottom:1.5px dashed var(--gold)!important;background:rgba(201,168,76,.08)!important;cursor:text;padding:1px 3px!important}
+footer{background:var(--maroon-dark);color:rgba(255,255,255,.5);text-align:center;padding:12px;font-size:.72rem}
+footer span{color:var(--gold-light)}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.card{animation:fi .3s ease both}
+@media(max-width:600px){.hdr{flex-direction:column;gap:8px;text-align:center}.grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="hdr">
+  <div>
+    <div class="org">جمعية فرقان لتحفيظ القرآن بالطائف</div>
+    <div class="sub">المركز الوطني لتنمية القطاع غير الربحي &nbsp;•&nbsp; ترخيص ٣١٥٨</div>
+  </div>
+  <div>
+    <div class="htitle">بطاقات اختبار قياس الفترة الصباحية، الأسبوع الخامس</div>
+    <div class="tagline"> إدارة التعليم النسائي &nbsp;•&nbsp; مكتب إشراف الداخل</div>
+  </div>
+  <img src="https://pbs.twimg.com/profile_images/1573906872956063745/3LnHPkhq_400x400.png" alt="شعار فرقان" style="height:72px;width:72px;object-fit:contain;flex-shrink:0;border-radius:50%;border:3px solid #C9A84C;outline:2px solid rgba(201,168,76,0.4);outline-offset:3px;">
+</div>
+<div class="goldbar"></div>
+<div class="toolbar">
+  <span class="tlabel">⚙️ أدوات:</span>
+  <button class="btn" id="editBtn" onclick="toggleEdit()">تعديل البطاقات</button>
+  <button class="btn btn-save" id="saveBtn" onclick="saveEdits()">حفظ التعديلات</button>
+  <button class="btn btn-clear" onclick="clearAll()">مسح التحديد</button>
+  <span class="saved-badge" id="savedBadge">✓ تم الحفظ</span>
+</div>
+<main id="mc"></main>
+<footer><span>رؤيتنا إتقان القرآن الكريم وتعظيم أثره</span> &nbsp;•&nbsp; جميع الحقوق محفوظة لجمعية فرقان</footer>
+</div>
+
+<script>
+const STORAGE_KEY = 'furqan_sabahi_w4_selected';
+const OPEN_KEY    = 'furqan_sabahi_w4_open';
+
+const data=[
+
+{title:"بطاقة اختبار قياس الفترة الصباحية ١",rows:[
+[{s:"سورة البقرة",v:"٤٧-٤٠"},{s:"سورة النور",v:"٣٤-٣٢"},{s:"سورة الذاريات",v:"٤٨-٣٨"}],
+[{s:"سورة الأنعام",v:"٦-١"},{s:"سورة الحجر",v:"٣٤-٢٣"},{s:"سورة يس",v:"٥٥-٤٧"}],
+[{s:"سورة النساء",v:"١٥٦-١٥٣"},{s:"سورة الفرقان",v:"٧٣-٦٧"},{s:"سورة الصافات",v:"٨٢-٦٧"}],
+[{s:"سورة آل عمران",v:"٧٨-٧٥"},{s:"سورة النمل",v:"٣٩-٣٢"},{s:"سورة الأحزاب",v:"٣٣-٣٠"}],
+[{s:"سورة التوبة",v:"٥٢-٤٨"},{s:"سورة يونس",v:"٢٦-٢٣"},{s:"سورة المعارج",v:"٤٤-٣١"}],
+[{s:"سورة الأنعام",v:"٧٠-٦٨"},{s:"سورة يوسف",v:"٢٨-٢٣"},{s:"سورة الروم",v:"٣٩-٣٣"}],
+[{s:"سورة النساء",v:"١٥٦-١٥٣"},{s:"سورة الرعد",v:"١٤-١٠"},{s:"سورة الأحزاب",v:"٥٣-٥٢"}],
+[{s:"سورة البقرة",v:"٢٠٧-٢٠٣"},{s:"سورة طه",v:"٨٦-٧٨"},{s:"سورة الزخرف",v:"٥٦-٤٨"}],
+[{s:"سورة الأنعام",v:"١٤٢-١٤٠"},{s:"سورة العنكبوت",v:"١٤-١٠"},{s:"سورة المنافقون",v:"١١-٧"}],
+[{s:"سورة المائدة",v:"٤٥-٤٤"},{s:"سورة الحج",v:"٤٤-٣٩"},{s:"سورة الفجر",v:"٢٣-٩"}],
+[{s:"سورة آل عمران",v:"١٥٣-١٥٢"},{s:"سورة الشعراء",v:"٢٢٧-٢١٣"},{s:"سورة الصافات",v:"١٤-١"}],
+[{s:"سورة الأعراف",v:"٢٠١-١٩٥"},{s:"سورة الفرقان",v:"٥٥-٤٨"},{s:"سورة الجاثية",v:"٢٧-٢٣"}],
+[{s:"سورة البقرة",v:"١٧٤-١٧٠"},{s:"سورة القصص",v:"٢٥-٢٠"},{s:"سورة القمر",v:"٥٥-٤١"}],
+[{s:"سورة الأنعام",v:"١٨-١٢"},{s:"سورة مريم",v:"٩٠-٧٧"},{s:"سورة المجادلة",v:"١٢-٩"}],
+[{s:"سورة النساء",v:"٧٥-٧١"},{s:"سورة هود",v:"٢٦-٢٣"},{s:"سورة غافر",v:"٣٨-٣٤"}],
+[{s:"سورة الأنفال",v:"٦٦-٦٢"},{s:"سورة النور",v:"٢٥-٢١"},{s:"سورة فصلت",v:"٢٩-٢٥"}],
+[{s:"سورة البقرة",v:"٧٦-٧٢"},{s:"سورة المؤمنون",v:"٢٠-١٢"},{s:"سورة فاطر",v:"١١-٨"}],
+[{s:"سورة الأنفال",v:"٦-١"},{s:"سورة الأنبياء",v:"١١٢-١٠٤"},{s:"سورة ص",v:"٢٩-٢٦"}],
+[{s:"سورة التوبة",v:"٨٥-٨١"},{s:"سورة إبراهيم",v:"٢٦-٢٢"},{s:"سورة المزمل",v:"٢٠"}],
+[{s:"سورة النساء",v:"١١-٩"},{s:"سورة الأنبياء",v:"٤٣-٣٧"},{s:"سورة الفتح",v:"٢٧-٢٣"}]
+]},
+
+{title:"بطاقة اختبار قياس الفترة الصباحية ٢",rows:[
+[{s:"سورة البقرة",v:"١٤١-١٣٧"},{s:"سورة يونس",v:"٦٤-٥٩"},{s:"سورة سبأ",v:"٧-٣"}],
+[{s:"سورة البقرة",v:"١٠٣-١٠٢"},{s:"سورة التوبة",v:"١١٠-١٠٧"},{s:"سورة يس",v:"٢٤-١٥"}],
+[{s:"سورة الأنعام",v:"١٠١-٩٧"},{s:"سورة الإسراء",v:"١٧-١٢"},{s:"سورة الأحزاب",v:"٥-١"}],
+[{s:"سورة الأعراف",v:"١٥٢-١٤٩"},{s:"سورة الكهف",v:"١٠٠-٩٣"},{s:"سورة محمد",v:"٣٨-٣٣"}],
+[{s:"سورة الأنفال",v:"٤٩-٤٦"},{s:"سورة الأنبياء",v:"٩٩-٩٢"},{s:"سورة يس",v:"٢٤-١٥"}],
+[{s:"سورة آل عمران",v:"١٦٥-١٦١"},{s:"سورة يوسف",v:"١٠٣-١٠٠"},{s:"سورة التغابن",v:"١٨-١٤"}],
+[{s:"سورة النساء",v:"٨٦-٨٣"},{s:"سورة الحج",v:"٢٣-١٨"},{s:"سورة الحاقة",v:"١٤-١"}],
+[{s:"سورة الأنعام",v:"١١١-١٠٨"},{s:"سورة الشعراء",v:"١٠٢-٨٤"},{s:"سورة الأحزاب",v:"٤٨-٤١"}],
+[{s:"سورة البقرة",v:"٢١٢-٢٠٨"},{s:"سورة إبراهيم",v:"٥-١"},{s:"سورة النازعات",v:"٤٦-٢٩"}],
+[{s:"سورة آل عمران",v:"١٨٠-١٧٧"},{s:"سورة المؤمنون",v:"٧٤-٦٤"},{s:"سورة الحديد",v:"١٦-١٣"}],
+[{s:"سورة التوبة",v:"٢٤-٢٠"},{s:"سورة النحل",v:"٢٣-١٥"},{s:"سورة الحجرات",v:"٥-١"}],
+[{s:"سورة البقرة",v:"١٠٣-١٠٢"},{s:"سورة يوسف",v:"٦٤-٥٨"},{s:"سورة الشورى",v:"٤٠-٣٢"}],
+[{s:"سورة النساء",v:"٩٦-٩٤"},{s:"سورة النحل",v:"٩٥-٩١"},{s:"سورة القلم",v:"٥٢-٣٤"}],
+[{s:"سورة آل عمران",v:"١٩١-١٨٧"},{s:"سورة هود",v:"٥٨-٥٣"},{s:"سورة الروم",v:"١٥-٩"}],
+[{s:"سورة البقرة",v:"٢٣٦-٢٣٤"},{s:"سورة الإسراء",v:"٧١-٦٧"},{s:"سورة الممتحنة",v:"٣-١"}],
+[{s:"سورة الأنعام",v:"١٠٨-١٠٢"},{s:"سورة طه",v:"٦٤-٥٥"},{s:"سورة الدخان",v:"٣٨-٣٠"}],
+[{s:"سورة آل عمران",v:"٧٨-٧٥"},{s:"سورة طه",v:"١٢٢-١١٣"},{s:"سورة سبأ",v:"٢٠-١٥"}],
+[{s:"سورة آل عمران",v:"١٨٠-١٧٧"},{s:"سورة الحج",v:"١٤-٨"},{s:"سورة ق",v:"١٨-٩"}],
+[{s:"سورة التوبة",v:"٤-١"},{s:"سورة الكهف",v:"٤٥-٣٩"},{s:"سورة ص",v:"٢٥-٢١"}],
+[{s:"سورة الأعراف",v:"١٥٧-١٥٦"},{s:"سورة الرعد",v:"٤٢-٣٧"},{s:"سورة المدثر",v:"٤٠-٣١"}]
+]},
+
+{title:"بطاقة اختبار قياس الفترة الصباحية ٣",rows:[
+[{s:"سورة آل عمران",v:"١٢٨-١٢٢"},{s:"سورة يوسف",v:"٧٨-٧٤"},{s:"سورة الزخرف",v:"٦٤-٥٧"}],
+[{s:"سورة البقرة",v:"١٧٤-١٧٠"},{s:"سورة الإسراء",v:"١٦-١"},{s:"سورة النجم",v:"٦٢-٤٥"}],
+[{s:"سورة المائدة",v:" من الآية ١ إلى الآية ٣ (وَمَا أَكَلَ السَّبُعُ)"},{s:"سورة يونس",v:"٣٩-٣٤"},{s:"سورة الأحقاف",v:"٣٣-٢٩"}],
+[{s:"سورة الأنعام",v:"١٤٩-١٤٦"},{s:"سورة الحج",v:"٧٦-٧٢"},{s:"سورة الواقعة",v:"٢٧-٩"}],
+[{s:"سورة آل عمران",v:"٦٨-٦٤"},{s:"سورة مريم",v:"٥٩-٥١"},{s:"سورة الدخان",v:"١٤-١"}],
+[{s:"سورة المائدة",v:"٤٥-٤٤"},{s:"سورة الكهف",v:"٢٩-٢٥"},{s:"سورة غافر",v:"٣٨-٣٤"}],
+[{s:"سورة المائدة",v:"٩٠-٨٧"},{s:"سورة النمل",v:"٨١-٧١"},{s:"سورة الجمعة",v:"٧-١"}],
+[{s:"سورة التوبة",v:"٥٨-٥٣"},{s:"سورة النحل",v:"١٤-١٠"},{s:"سورة فصلت",v:"٥١-٤٧"}],
+[{s:"سورة النساء",v:"١١٢-١٠٧"},{s:"سورة النور",v:"٥٩-٥٦"},{s:"سورة التغابن",v:"٩-٥"}],
+[{s:"سورة البقرة",v:"٢٨٢ (عشر سطور)"},{s:"سورة هود",v:"٢٠-١٧"},{s:"سورة الأحزاب",v:"١٧-١٣"}],
+[{s:"سورة الأعراف",v:"١٣١-١٢٧"},{s:"سورة إبراهيم",v:"١٦-١١"},{s:"سورة الطور",v:"٢١-١١"}],
+[{s:"سورة الأنفال",v:"٧٣-٧٠"},{s:"سورة يوسف",v:"٤١-٣٨"},{s:"سورة فاطر",v:"٢٢-١٦"}],
+[{s:"سورة البقرة",v:"٢٨١-٢٧٦"},{s:"سورة القصص",v:"٥٧-٥١"},{s:"سورة محمد",v:"٩-٤"}],
+[{s:"سورة التوبة",v:"٨-٥"},{s:"سورة الكهف",v:"٧٦-٦٦"},{s:"سورة الزمر",v:"٢٥-٢١"}],
+[{s:"سورة الأعراف",v:"٧٥-٧٣"},{s:"سورة الإسراء",v:"١٢-٧"},{s:"سورة الحشر",v:"٥-١"}],
+[{s:"سورة البقرة",v:"١٦٩-١٦٥"},{s:"سورة الفرقان",v:"٢٠-١٦"},{s:"سورة فاطر",v:"٣١-٢٧"}],
+[{s:"سورة النساء",v:"١٤٤-١٤١"},{s:"سورة طه",v:"٩٣-٨٦"},{s:"سورة التحريم",v:"١٠-٨"}],
+[{s:"سورة البقرة",v:"٤٧-٤٠"},{s:"سورة التوبة",v:"١٢٦-١٢٢"},{s:"سورة الشورى",v:"٢٧-٢٣"}],
+[{s:"سورة آل عمران",v:"١٧٠-١٦٦"},{s:"سورة طه",v:"١٠١-٩٤"},{s:"سورة سبأ",v:"٥٤-٤٧"}],
+[{s:"سورة الأنعام",v:"٥٠-٤٦"},{s:"سورة الحجر",v:"٩٩-٨٧"},{s:"سورة الصف",v:"١٤-١٠"}]
+]},
+
+{title:"بطاقة اختبار قياس الفترة الصباحية ٤",rows:[
+[{s:"سورة المائدة",v:"٧٠-٦٧"},{s:"سورة يونس",v:"١٥-١٢"},{s:"سورة النبأ",v:"٤٠-٣١"}],
+[{s:"سورة آل عمران",v:"١١٥-١١٠"},{s:"سورة يوسف",v:"٤٩-٤٣"},{s:"سورة يس",v:"٧٦-٦٨"}],
+[{s:"سورة البقرة",v:"٨٦-٨٤"},{s:"سورة الأنبياء",v:"٢٤-١٥"},{s:"سورة الصافات",v:"١٤٢-١٢٣"}],
+[{s:"سورة النساء",v:"١٠١-٩٧"},{s:"سورة هود",v:"٤٤-٤٠"},{s:"سورة ص",v:"٢١-١٢"}],
+[{s:"سورة النساء",v:"٣٩-٣٦"},{s:"سورة هود",v:"٢٦-٢٣"},{s:"سورة الواقعة",v:"٢٧-٩"}],
+[{s:"سورة البقرة",v:"٥٤-٤٩"},{s:"سورة إبراهيم",v:"١٠-٨"},{s:"سورة لقمان",v:"٣٤-٣١"}],
+[{s:"سورة آل عمران",v:"١٦٠-١٥٦"},{s:"سورة الكهف",v:"٢٩-٢٥"},{s:"سورة سبأ",v:"٢٠-١٥"}],
+[{s:"سورة الأنفال",v:"٣٥-٣١"},{s:"سورة مريم",v:"٧٣-٦٥"},{s:"سورة التغابن",v:"٩-٥"}],
+[{s:"سورة الأنعام",v:"١٣١-١٢٨"},{s:"سورة الإسراء",v:"٦٢-٥٨"},{s:"سورة الطلاق",v:"٩-٦"}],
+[{s:"سورة النساء",v:"١٤٤-١٤١"},{s:"سورة يونس",v:"٩٢-٨٧"},{s:"سورة الصافات",v:"١٧٨-١٦١"}],
+[{s:"سورة النساء",v:"١٥٢-١٤٨"},{s:"سورة يوسف",v:"٣٦-٣١"},{s:"سورة فصلت",v:"٢٥-٢١"}],
+[{s:"سورة التوبة",v:"٦٣-٦٠"},{s:"سورة هود",v:"٩١-٨٦"},{s:"سورة الأحزاب",v:"٣٨-٣٦"}],
+[{s:"سورة آل عمران",v:"٦٨-٦٤"},{s:"سورة الحج",v:"٦١-٥٦"},{s:"سورة الأعلى",v:"١٩-١"}],
+[{s:"سورة البقرة",v:"١١٨-١١٤"},{s:"سورة الإسراء",v:"٤٥-٣٧"},{s:"سورة المزمل",v:"١٩-٩"}],
+[{s:"سورة الأنعام",v:"١٢٢-١١٩"},{s:"سورة الرعد",v:"١٨-١٦"},{s:"سورة الصافات",v:"٦٦-٥١"}],
+[{s:"سورة التوبة",v:"٨-٥"},{s:"سورة النحل",v:"٥٠-٤٣"},{s:"سورة الصف",v:"١٤-١٠"}],
+[{s:"سورة الأعراف",v:"١٦٧-١٦٣"},{s:"سورة النحل",v:"٧٨-٧٥"},{s:"سورة سبأ",v:"٣١-٢٦"}],
+[{s:"سورة النساء",v:"١٧٣-١٧١"},{s:"سورة الحجر",v:"١١-١"},{s:"سورة نوح",v:"٢٨-٢١"}],
+[{s:"سورة البقرة",v:"١٤١-١٣٧"},{s:"سورة المؤمنون",v:"٥١-٤٢"},{s:"سورة الحجرات",v:"٩-٦"}],
+[{s:"سورة التوبة",v:"٦٨-٦٤"},{s:"سورة إبراهيم",v:"١٠-٨"},{s:"سورة الحديد",v:"١٢-٩"}]
+]}
+];
+
+let editMode = false;
+let selected = {};
+let open = {};
+try {
+  const s = localStorage.getItem(STORAGE_KEY);
+  const o = localStorage.getItem(OPEN_KEY);
+  if(s) selected = JSON.parse(s);
+  if(o) open = JSON.parse(o);
+} catch(e){}
+
+function saveState(){
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(selected));
+    localStorage.setItem(OPEN_KEY, JSON.stringify(open));
+  } catch(e){}
+}
+
+function showSavedBadge(){
+  const b = document.getElementById('savedBadge');
+  b.classList.add('show');
+  setTimeout(()=>b.classList.remove('show'), 1800);
+}
+
+function toA(n){return n.toString().replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d])}
+
+function render(){
+  const mc=document.getElementById('mc');mc.innerHTML='';
+  data.forEach((page,pi)=>{
+    const g=document.createElement('div');g.className='cgroup';
+    const gid='g'+pi;
+    g.innerHTML=`<div class="gtitle"><h2>${page.title}</h2><div class="gline"></div><div class="gbadge">${toA(page.rows.length)} صفًا</div></div><div class="grid" id="${gid}"></div>`;
+    mc.appendChild(g);
+    page.rows.forEach((row,ri)=>document.getElementById(gid).appendChild(buildCard(pi,ri,row)));
+  });
+}
+
+function buildCard(pi,ri,row){
+  const key=pi+'-'+ri;
+  const card=document.createElement('div');
+  card.className='card'+(selected[key]?' selected':'')+(open[key]?' open':'');
+  card.id='c-'+key;
+
+  const numDiv=document.createElement('div');
+  numDiv.className='cnum';
+  numDiv.innerHTML=`<span class="nlabel">الرقم</span><span class="num">${toA(ri+1)}</span>`;
+  numDiv.addEventListener('click',function(e){
+    e.stopPropagation();
+    if(editMode) return;
+    open[key]=!open[key];
+    card.classList.toggle('open',open[key]);
+    saveState();
+  });
+
+  const chk=document.createElement('span');chk.className='chk';chk.textContent='✓';
+  const eb=document.createElement('span');eb.className='ebadge';eb.textContent='تعديل';
+  const body=document.createElement('div');body.className='cbody';
+
+  row.forEach((item,idx)=>{
+    const en=document.createElement('div');en.className='sentry';
+    const sn=document.createElement('span');sn.className='sname';
+    sn.dataset.pi=pi;sn.dataset.ri=ri;sn.dataset.idx=idx;sn.textContent=item.s;
+    const sv=document.createElement('span');sv.className='sver';
+    sv.dataset.pi=pi;sv.dataset.ri=ri;sv.dataset.idx=idx;const parts=item.v.split('-');sv.textContent=parts.length===2?parts[1].trim()+'-'+parts[0].trim():item.v;
+    en.appendChild(sn);en.appendChild(sv);body.appendChild(en);
+  });
+
+  card.appendChild(numDiv);card.appendChild(chk);card.appendChild(eb);card.appendChild(body);
+
+  card.addEventListener('click',function(e){
+    if(editMode) return;
+    if(e.target===numDiv||numDiv.contains(e.target)) return;
+    selected[key]=!selected[key];
+    card.classList.toggle('selected',selected[key]);
+    saveState();
+    showSavedBadge();
+  });
+
+  return card;
+}
+
+function toggleEdit(){
+  editMode=!editMode;
+  document.getElementById('editBtn').classList.toggle('active',editMode);
+  document.getElementById('saveBtn').classList.toggle('visible',editMode);
+  document.querySelectorAll('.card').forEach(c=>{
+    c.classList.toggle('edit-mode',editMode);
+    c.querySelectorAll('.sname,.sver').forEach(el=>el.contentEditable=editMode?'true':'false');
+  });
+}
+
+function saveEdits(){
+  document.querySelectorAll('.sname').forEach(el=>data[el.dataset.pi].rows[el.dataset.ri][el.dataset.idx].s=el.innerText.trim());
+  document.querySelectorAll('.sver').forEach(el=>data[el.dataset.pi].rows[el.dataset.ri][el.dataset.idx].v=el.innerText.trim());
+  toggleEdit();
+}
+
+function clearAll(){
+  document.querySelectorAll('.card').forEach(c=>{
+    c.classList.remove('selected');
+    const k=c.id.replace('c-','');
+    selected[k]=false;
+  });
+  saveState();
+}
+
+render();
+</script>
+</body>
+</html>
